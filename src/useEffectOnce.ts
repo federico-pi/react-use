@@ -1,7 +1,15 @@
-import { EffectCallback, useEffect } from 'react';
+import { EffectCallback, useEffect, useRef } from 'react';
 
-const useEffectOnce = (effect: EffectCallback) => {
-  useEffect(effect, []);
+const useEffectOnce = (callback: EffectCallback) => {
+  const hasExecuted = useRef(false);
+
+  useEffect(() => {
+    if (hasExecuted.current) return;
+
+    callback();
+    hasExecuted.current = true;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 };
 
 export default useEffectOnce;
